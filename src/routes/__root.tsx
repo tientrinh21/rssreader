@@ -1,18 +1,25 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Navbar } from '../components/navbar'
-import { Footer } from '../components/footer'
+// import { Footer } from '../components/Footer'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { QueryClient } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-export const Route = createRootRoute({
-	component: Root,
+export const Route = createRootRouteWithContext<{
+	queryClient: QueryClient
+}>()({
+	component: RootComponent,
 })
 
-function Root() {
+function RootComponent() {
 	return (
 		<>
 			<Navbar />
-			<Outlet />
+			<main className="px-5 sm:px-10">
+				<Outlet />
+			</main>
 			{/* <Footer /> */}
+			<ReactQueryDevtools />
 			<TanStackRouterDevtools />
 		</>
 	)

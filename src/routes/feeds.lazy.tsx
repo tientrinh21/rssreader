@@ -1,9 +1,13 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/feeds')({
-	component: About,
+	component: FeedsComponent,
 })
 
-function About() {
-	return <div className="p-2">Hello from About!</div>
+function FeedsComponent() {
+	return (
+		<main>
+			<h2 className="text-lg font-bold">Feed List</h2>
+		</main>
+	)
 }
