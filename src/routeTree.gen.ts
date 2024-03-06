@@ -13,15 +13,17 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as FeedsImport } from './routes/feeds'
 import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
-const FeedsLazyImport = createFileRoute('/feeds')()
+const FeedsIndexLazyImport = createFileRoute('/feeds/')()
+const FeedsFeedIdLazyImport = createFileRoute('/feeds/$feedId')()
 
 // Create/Update Routes
 
-const FeedsLazyRoute = FeedsLazyImport.update({
+const FeedsRoute = FeedsImport.update({
   path: '/feeds',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/feeds.lazy').then((d) => d.Route))
@@ -30,6 +32,16 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const FeedsIndexLazyRoute = FeedsIndexLazyImport.update({
+  path: '/',
+  getParentRoute: () => FeedsRoute,
+} as any).lazy(() => import('./routes/feeds.index.lazy').then((d) => d.Route))
+
+const FeedsFeedIdLazyRoute = FeedsFeedIdLazyImport.update({
+  path: '/$feedId',
+  getParentRoute: () => FeedsRoute,
+} as any).lazy(() => import('./routes/feeds.$feedId.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -40,12 +52,23 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/feeds': {
-      preLoaderRoute: typeof FeedsLazyImport
+      preLoaderRoute: typeof FeedsImport
       parentRoute: typeof rootRoute
+    }
+    '/feeds/$feedId': {
+      preLoaderRoute: typeof FeedsFeedIdLazyImport
+      parentRoute: typeof FeedsImport
+    }
+    '/feeds/': {
+      preLoaderRoute: typeof FeedsIndexLazyImport
+      parentRoute: typeof FeedsImport
     }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, FeedsLazyRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  FeedsRoute.addChildren([FeedsFeedIdLazyRoute, FeedsIndexLazyRoute]),
+])
