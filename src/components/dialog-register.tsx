@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from 'zod'
-import { fetchUser } from "@/lib/request"
+import { createUser } from "@/lib/request"
 import { useState } from "react"
 import {
   Form,
@@ -28,51 +28,58 @@ import { Input } from '@/components/ui/input'
 import toast from 'react-hot-toast'
 
 const formSchema = z.object({
-  apiKey: z.string().length(64, {
-    message: "API Key must have exactly 64 characters.",
+  name: z.string().min(2, {
+    message: "Your name must be at least 2 characters",
   })
 })
 
-export function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
+export function RegisterForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
+
   // 1. Define form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      apiKey: "",
+      name: "",
     },
   })
 
   // 2. Define a submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const user = await fetchUser(values.apiKey)
-      localStorage.setItem("user", btoa(JSON.stringify(user)))
-
+      const user = await createUser(values.name)
       props.setOpenDialog(false)
-      window.location.reload()
-    } catch (error) {
+
+
       toast.custom((t) => (
         <div
           className={`${t.visible ? 'animate-enter' : 'animate-leave'
-            } max-w-fit w-full bg-red-500 border-[1px] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+            } max-w-fit w-full bg-background  border-[1px] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
         >
           <div className="flex flex-col place-items-center gap-2 p-4 w-full">
-            <span className="text-primary font-semibold">No user with this API key exists ⚠️</span>
+            <span className="text-primary font-semibold">✅ Register successful!</span>
+            <span className="text-primary text-sm">Please store the API key, you only see it once.</span>
+
+            <pre className="mt-2 w-full rounded-md bg-slate-950 p-4">
+              <span className="text-white">{user.apiKey}</span>
+            </pre>
           </div>
         </div>
       ))
+    } catch (error) {
+      toast.error("Uh oh! Something went wrong.");
+
     }
   }
 
   return (
     <Form {...form}>
-      <form id="login" onSubmit={form.handleSubmit(onSubmit)} className="my-2">
+      <form id="register" onSubmit={form.handleSubmit(onSubmit)} className="my-2">
         <FormField
           control={form.control}
-          name="apiKey"
+          name="name"
           render={({ field }) => (
             <FormItem className="grid grid-cols-4 items-center gap-4">
-              <FormLabel className="text-right">API Key</FormLabel>
+              <FormLabel className="text-right">Name</FormLabel>
               <FormControl className="col-span-3">
                 <Input {...field} />
               </FormControl>
@@ -86,31 +93,31 @@ export function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void 
 }
 
 
-export function DialogLogin() {
+export function DialogRegister() {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Login</Button>
+        <Button variant="secondary">Register</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Login</DialogTitle>
+          <DialogTitle>Register</DialogTitle>
           <DialogDescription>
-            Input your API Key here.
+            Input your name here
           </DialogDescription>
         </DialogHeader>
 
-        <LoginForm setOpenDialog={setOpen} />
+        <RegisterForm setOpenDialog={setOpen} />
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button form='login' type="button" variant="outline">
+            <Button form='register' type="button" variant="outline">
               Close
             </Button>
           </DialogClose>
-          <Button type="submit" form="login">Next</Button>
+          <Button type="submit" form="register">Next</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

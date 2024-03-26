@@ -15,11 +15,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as FeedsImport } from './routes/feeds'
 import { Route as IndexImport } from './routes/index'
+import { Route as FeedsFeedIdImport } from './routes/feeds.$feedId'
 
 // Create Virtual Routes
 
 const FeedsIndexLazyImport = createFileRoute('/feeds/')()
-const FeedsFeedIdLazyImport = createFileRoute('/feeds/$feedId')()
 
 // Create/Update Routes
 
@@ -38,7 +38,7 @@ const FeedsIndexLazyRoute = FeedsIndexLazyImport.update({
   getParentRoute: () => FeedsRoute,
 } as any).lazy(() => import('./routes/feeds.index.lazy').then((d) => d.Route))
 
-const FeedsFeedIdLazyRoute = FeedsFeedIdLazyImport.update({
+const FeedsFeedIdRoute = FeedsFeedIdImport.update({
   path: '/$feedId',
   getParentRoute: () => FeedsRoute,
 } as any).lazy(() => import('./routes/feeds.$feedId.lazy').then((d) => d.Route))
@@ -56,7 +56,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/feeds/$feedId': {
-      preLoaderRoute: typeof FeedsFeedIdLazyImport
+      preLoaderRoute: typeof FeedsFeedIdImport
       parentRoute: typeof FeedsImport
     }
     '/feeds/': {
@@ -70,5 +70,5 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  FeedsRoute.addChildren([FeedsFeedIdLazyRoute, FeedsIndexLazyRoute]),
+  FeedsRoute.addChildren([FeedsFeedIdRoute, FeedsIndexLazyRoute]),
 ])

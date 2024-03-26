@@ -1,32 +1,40 @@
 import axios from 'axios'
+import type { Feed, Post, User } from './types'
 
-export type Feed = {
-  id: string
-  // created_at: Date
-  // updated_at: Date
-  name: string
-  url: string
-  // user_id: string
-}
+const URL = 'http://localhost:8000/'
+// const URL = 'https://tientrinh.tail74cd2.ts.net/'
 
+/** FEED **/
 export const fetchFeeds = async () => {
   console.log('Fetching feeds...')
-  await new Promise((r) => setTimeout(r, 500))
+  await new Promise((r) => setTimeout(r, 500)) // Delay for slow Internet simulation
   return axios
-    .get<Feed[]>('http://localhost:8000/v1/feeds')
-    // .get<Feed[]>('https://delayed-enquiry-level-guns.trycloudflare.com/v1/feeds')
+    .get<Feed[]>(`${URL}v1/feeds`)
     .then((r) => r.data)
 }
 
-export type Post = {
-
+/** POSTS **/
+export const fetchPosts = async (feedId: string) => {
+  console.log(`Fetching posts with feed id ${feedId}...`)
+  await new Promise((r) => setTimeout(r, 1000)) // Delay for slow Internet simulation
+  return axios
+    .get<Post[]>(`${URL}v1/feeds/${feedId}`)
+    .then((r) => r.data)
 }
 
-export const fetchFeedPosts = async () => {
-  console.log('Fetching posts...')
-  await new Promise((r) => setTimeout(r, 500))
+/** USER **/
+export const fetchUser = async (apiKey: string) => {
   return axios
-    // .get<Feed[]>('http://localhost:8000/v1/feeds')
-    .get<Feed[]>('https://delayed-enquiry-level-guns.trycloudflare.com/v1/feeds')
+    .get<User>(`${URL}v1/users`, {
+      headers: {
+        Authorization: `ApiKey ${apiKey}`
+      }
+    })
+    .then((r) => r.data)
+}
+
+export const createUser = async (name: string) => {
+  return axios
+    .post<User>(`${URL}v1/users`, { name: name })
     .then((r) => r.data)
 }

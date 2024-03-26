@@ -5,5 +5,9 @@ export const Route = createLazyFileRoute('/feeds/')({
 })
 
 function FeedsIndexComponent() {
-  return <div>Select a feed.</div>
+  return (
+    <div className='text-center w-full pt-5'>
+      <span className='font-bold text-lg'>Select a feed.</span>
+    </div>
+  )
 }
