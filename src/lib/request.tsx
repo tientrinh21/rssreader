@@ -5,7 +5,7 @@ import type { Feed, Post, User } from './types'
 // const URL = 'http://localhost:8000/'
 
 // Production
-const URL = 'https://rssagg.onrender.com'
+const URL = 'https://rssagg.onrender.com/'
 
 /** USER **/
 export const fetchUser = async (apiKey: string) => {
