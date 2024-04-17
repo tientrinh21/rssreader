@@ -45,3 +45,7 @@ VITE_AGG_URL='http://localhost:8000/'
   - [Tanstack Router](https://tanstack.com/router/)
   - [React Query](https://tanstack.com/query/)
   - [React Host Toast](https://react-hot-toast.com/)
+
+## Author
+
+Built by [Tien Trinh](https://tientrinh.netlify.app/)
