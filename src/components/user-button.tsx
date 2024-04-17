@@ -8,7 +8,7 @@ export function UserButton(props: { user: User }) {
 
   function logout() {
     localStorage.removeItem("user")
-    window.location.reload()
+    // window.location.reload()
   }
 
   return (
