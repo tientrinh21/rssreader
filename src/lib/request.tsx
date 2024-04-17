@@ -1,11 +1,7 @@
 import axios from 'axios'
 import type { Feed, Post, User } from './types'
 
-// Local dev
-// const URL = 'http://localhost:8000/'
-
-// Production
-const URL = 'https://rssagg.onrender.com/'
+const URL = import.meta.env.VITE_AGG_URL
 
 /** USER **/
 export const fetchUser = async (apiKey: string) => {

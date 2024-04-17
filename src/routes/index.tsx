@@ -1,13 +1,12 @@
-import { queryOptions } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { fetchFeeds } from '@/lib/request'
-
-const feedsQueryOptions = queryOptions({
-  queryKey: ['/'],
-  queryFn: () => fetchFeeds(),
-})
+import { isAuth } from '@/lib/utils'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  loader: ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(feedsQueryOptions),
+  loader: () => {
+    if (isAuth()) {
+      throw redirect({
+        to: '/feeds',
+      })
+    }
+  },
 })
