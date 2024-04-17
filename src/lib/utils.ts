@@ -11,7 +11,7 @@ export function isAuth() {
   return !!encodedUser
 }
 
-export function getUser() {
+export function getUserFromStorage() {
   const encodedUser = localStorage.getItem('user')
   if (!encodedUser) return
   const user: User = JSON.parse(atob(encodedUser as string))

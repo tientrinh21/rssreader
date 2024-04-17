@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { User } from '@/lib/types'
-import { getUser, isAuth } from '@/lib/utils'
+import { getUserFromStorage, isAuth } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
 import { LoginDialog } from './dialog-login'
@@ -21,7 +21,7 @@ const navItems = [
 ]
 
 export const Navbar = () => {
-  const user: User = getUser()
+  const user = getUserFromStorage() as User
 
   return (
     <nav className="flex justify-between gap-5 p-5 sm:px-10">

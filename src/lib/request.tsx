@@ -4,6 +4,25 @@ import type { Feed, Post, User } from './types'
 const URL = 'http://localhost:8000/'
 // const URL = 'https://tientrinh.tail74cd2.ts.net/'
 
+/** USER **/
+export const fetchUser = async (apiKey: string) => {
+  console.log('Loging in...')
+  return axios
+    .get<User>(`${URL}v1/users`, {
+      headers: {
+        Authorization: `ApiKey ${apiKey}`
+      }
+    })
+    .then((r) => r.data)
+}
+
+export const createUser = async (name: string) => {
+  console.log('Creating new user...')
+  return axios
+    .post<User>(`${URL}v1/users`, { name: name })
+    .then((r) => r.data)
+}
+
 /** FEED **/
 export const fetchFeeds = async () => {
   console.log('Fetching feeds...')
@@ -13,7 +32,8 @@ export const fetchFeeds = async () => {
     .then((r) => r.data)
 }
 
-export const createFeed = async (apiKey: string, data: { feedName: string, feedURL: string }) => {
+export const createFeed = async (apiKey: string, data: { name: string, url: string }) => {
+  console.log(`Creating feed ${data.name}...`)
   return axios
     .post<Feed>(`${URL}v1/feeds`, data, {
       headers: {
@@ -29,22 +49,5 @@ export const fetchPosts = async (feedId: string) => {
   await new Promise((r) => setTimeout(r, 1000)) // Delay for slow Internet simulation
   return axios
     .get<Post[]>(`${URL}v1/feeds/${feedId}`)
-    .then((r) => r.data)
-}
-
-/** USER **/
-export const fetchUser = async (apiKey: string) => {
-  return axios
-    .get<User>(`${URL}v1/users`, {
-      headers: {
-        Authorization: `ApiKey ${apiKey}`
-      }
-    })
-    .then((r) => r.data)
-}
-
-export const createUser = async (name: string) => {
-  return axios
-    .post<User>(`${URL}v1/users`, { name: name })
     .then((r) => r.data)
 }

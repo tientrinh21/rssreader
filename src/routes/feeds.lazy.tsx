@@ -24,8 +24,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-// import { createFeed } from '@/lib/request'
-import type { Feed } from '@/lib/types'
+import { createFeed } from '@/lib/request'
+import type { User, Feed } from '@/lib/types'
+import { getUserFromStorage } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, Outlet, createLazyFileRoute, useLoaderData } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
@@ -108,29 +109,30 @@ function AddFeedDialog() {
   )
 }
 
-const formSchema = z.object({
-  feedName: z.string().min(2, {
+const createFeedFormSchema = z.object({
+  name: z.string().min(2, {
     message: "Feed name should be more than 1 character",
   }),
-  feedURL: z.string().url({ message: "Invalid URL" })
+  url: z.string().url({ message: "Invalid URL" })
 })
 
 function AddFeedForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
   // 1. Define form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createFeedFormSchema>>({
+    resolver: zodResolver(createFeedFormSchema),
     defaultValues: {
-      feedName: "",
-      feedURL: ""
+      name: "",
+      url: ""
     },
   })
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    // TODO: Do something
+  async function onSubmit(data: z.infer<typeof createFeedFormSchema>) {
     try {
-      // const feed = await createFeed()
+      const user = getUserFromStorage() as User
+      const feed = await createFeed(user.apiKey, data)
 
       props.setOpenDialog(false)
-      toast(JSON.stringify(data, null, 2))
+      toast.success(`${feed.name} successfully added.`)
+      window.location.reload()
     } catch (error) {
       toast.error("Uh oh! Something went wrong.");
     }
@@ -141,7 +143,7 @@ function AddFeedForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
       <form id="add-feed" onSubmit={form.handleSubmit(onSubmit)} className="my-2">
         <FormField
           control={form.control}
-          name="feedName"
+          name="name"
           render={({ field }) => (
             <FormItem className="grid grid-cols-4 items-center gap-4">
               <FormLabel className="text-right">Name</FormLabel>
@@ -154,7 +156,7 @@ function AddFeedForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
         />
         <FormField
           control={form.control}
-          name="feedURL"
+          name="url"
           render={({ field }) => (
             <FormItem className="grid grid-cols-4 items-center gap-4">
               <FormLabel className="text-right">URL</FormLabel>

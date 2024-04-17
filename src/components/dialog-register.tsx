@@ -27,7 +27,7 @@ import {
 import { Input } from '@/components/ui/input'
 import toast from 'react-hot-toast'
 
-const formSchema = z.object({
+const registerFormSchema = z.object({
   name: z.string().min(2, {
     message: "Your name must be at least 2 characters",
   })
@@ -35,15 +35,15 @@ const formSchema = z.object({
 
 export function RegisterForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
   // 1. Define form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
     },
   })
 
   // 2. Define a submit handler
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     try {
       const user = await createUser(values.name)
       props.setOpenDialog(false)

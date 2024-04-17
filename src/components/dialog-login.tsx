@@ -27,7 +27,7 @@ import {
 import { Input } from '@/components/ui/input'
 import toast from 'react-hot-toast'
 
-const formSchema = z.object({
+const loginFormSchema = z.object({
   apiKey: z.string().length(64, {
     message: "API Key must have exactly 64 characters",
   })
@@ -35,15 +35,15 @@ const formSchema = z.object({
 
 function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
   // 1. Define form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       apiKey: "",
     },
   })
 
   // 2. Define a submit handler
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
       const user = await fetchUser(values.apiKey)
       localStorage.setItem("user", btoa(JSON.stringify(user)))
