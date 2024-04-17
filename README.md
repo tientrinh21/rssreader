@@ -35,3 +35,11 @@ This website come with three themes: Dark, Light and Dracula.
 - Check feed lists
 - See posts of a feed
 - Add a feed source
+
+## Quickstart
+Create `.env` file and add the URL of the RSS Aggregator as `VITE_AGG_URL`.
+
+For example:
+```python
+VITE_AGG_URL='http://localhost:8000/'
+```
