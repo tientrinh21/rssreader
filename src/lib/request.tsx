@@ -1,8 +1,11 @@
 import axios from 'axios'
 import type { Feed, Post, User } from './types'
 
-const URL = 'http://localhost:8000/'
-// const URL = 'https://tientrinh.tail74cd2.ts.net/'
+// Local dev
+// const URL = 'http://localhost:8000/'
+
+// Production
+const URL = 'https://rssagg.onrender.com'
 
 /** USER **/
 export const fetchUser = async (apiKey: string) => {
