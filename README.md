@@ -2,6 +2,8 @@
 
 Front-end UI to display feeds/posts and manage users for [RSS Aggregator](https://github.com/tientrinh21/rssagg)
 
+The site is hosted on [origomi.vercel.app](https://origomi.vercel.app/)
+
 ## Tech Used
 
 - **Language:** TypeScript
