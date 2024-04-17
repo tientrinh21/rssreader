@@ -1,4 +1,4 @@
-import logo from '@/assets/origomi-logo.svg'
+import logo from '/origomi-logo.svg'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
