@@ -1,9 +1,4 @@
-import { Menu } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
-import { DialogLogin } from './dialog-login'
-import { DialogRegister } from './dialog-register'
-import { UserButton } from './user-button'
-import { ModeToggle } from './mode-toggle'
+import logo from '@/assets/origomi-logo.svg'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,8 +6,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import logo from '@/assets/origomi-logo.svg'
 import type { User } from '@/lib/types'
+import { getUser, isAuth } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { Menu } from 'lucide-react'
+import { LoginDialog } from './dialog-login'
+import { RegisterDialog } from './dialog-register'
+import { ModeToggle } from './mode-toggle'
+import { UserButton } from './user-button'
 
 const navItems = [
   { title: 'Home', path: '/' },
@@ -20,11 +21,7 @@ const navItems = [
 ]
 
 export const Navbar = () => {
-  let isAuth = false
-  const encodedUser = localStorage.getItem('user')
-
-  if (encodedUser) isAuth = true
-  const user: User = isAuth ? JSON.parse(atob(encodedUser as string)) : undefined
+  const user: User = getUser()
 
   return (
     <nav className="flex justify-between gap-5 p-5 sm:px-10">
@@ -45,11 +42,11 @@ export const Navbar = () => {
       <div className="flex items-center gap-1">
         <ModeToggle />
         {
-          isAuth ?
+          isAuth() ?
             <UserButton user={user} />
             : <>
-              <DialogLogin />
-              <DialogRegister />
+              <LoginDialog />
+              <RegisterDialog />
             </>
         }
       </div>

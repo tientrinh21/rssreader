@@ -29,11 +29,11 @@ import toast from 'react-hot-toast'
 
 const formSchema = z.object({
   apiKey: z.string().length(64, {
-    message: "API Key must have exactly 64 characters.",
+    message: "API Key must have exactly 64 characters",
   })
 })
 
-export function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
+function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
   // 1. Define form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,7 +86,7 @@ export function LoginForm(props: { setOpenDialog: (openDialog: boolean) => void 
 }
 
 
-export function DialogLogin() {
+export function LoginDialog() {
   const [open, setOpen] = useState(false)
 
   return (

@@ -13,6 +13,16 @@ export const fetchFeeds = async () => {
     .then((r) => r.data)
 }
 
+export const createFeed = async (apiKey: string, data: { feedName: string, feedURL: string }) => {
+  return axios
+    .post<Feed>(`${URL}v1/feeds`, data, {
+      headers: {
+        Authorization: `ApiKey ${apiKey}`
+      }
+    })
+    .then((r) => r.data)
+}
+
 /** POSTS **/
 export const fetchPosts = async (feedId: string) => {
   console.log(`Fetching posts with feed id ${feedId}...`)

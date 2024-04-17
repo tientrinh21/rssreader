@@ -34,7 +34,6 @@ const formSchema = z.object({
 })
 
 export function RegisterForm(props: { setOpenDialog: (openDialog: boolean) => void }) {
-
   // 1. Define form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,7 +66,6 @@ export function RegisterForm(props: { setOpenDialog: (openDialog: boolean) => vo
       ))
     } catch (error) {
       toast.error("Uh oh! Something went wrong.");
-
     }
   }
 
@@ -93,7 +91,7 @@ export function RegisterForm(props: { setOpenDialog: (openDialog: boolean) => vo
 }
 
 
-export function DialogRegister() {
+export function RegisterDialog() {
   const [open, setOpen] = useState(false)
 
   return (
